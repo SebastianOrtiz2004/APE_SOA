@@ -1,0 +1,63 @@
+-- Crear la base de datos
+CREATE DATABASE IF NOT EXISTS vehiculo_db
+  DEFAULT CHARACTER SET utf8mb4
+  COLLATE utf8mb4_general_ci;
+USE vehiculo_db;
+
+-- Tabla de marcas
+CREATE TABLE IF NOT EXISTS marca (
+  id_marca       INT AUTO_INCREMENT PRIMARY KEY,
+  nombre         VARCHAR(100) NOT NULL,
+  fecha_creacion TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_general_ci;
+
+-- Tabla de modelos
+CREATE TABLE IF NOT EXISTS modelo (
+  id_modelo      INT AUTO_INCREMENT PRIMARY KEY,
+  id_marca       INT          NOT NULL,
+  nombre         VARCHAR(100) NOT NULL,
+  fecha_creacion TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (id_marca)
+    REFERENCES marca(id_marca)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_general_ci;
+
+-- Tabla de colores
+CREATE TABLE IF NOT EXISTS color (
+  id_color       INT AUTO_INCREMENT PRIMARY KEY,
+  nombre         VARCHAR(50)  NOT NULL,
+  fecha_creacion TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_general_ci;
+
+-- Tabla de vehículos
+CREATE TABLE IF NOT EXISTS vehiculo (
+  id_vehiculo    INT AUTO_INCREMENT PRIMARY KEY,
+  id_marca       INT          NOT NULL,
+  id_modelo      INT          NOT NULL,
+  placa          VARCHAR(10)  NOT NULL UNIQUE,
+  chasis         VARCHAR(17)  NOT NULL UNIQUE,
+  anio           INT          NOT NULL,
+  id_color       INT          NOT NULL,
+  fecha_creacion TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (id_marca)
+    REFERENCES marca(id_marca)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  FOREIGN KEY (id_modelo)
+    REFERENCES modelo(id_modelo)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  FOREIGN KEY (id_color)
+    REFERENCES color(id_color)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_general_ci;
